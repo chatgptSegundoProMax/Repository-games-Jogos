@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metalúrgica Tech - Chatbot v2</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+         background-color: #343536;
+         background-image: url();
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 100vh;
+        }
+#chat-container {
+    width: 400px;
+    height:550px;
+    background: rgb(247, 243, 243);
+    border-radius:15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display:flex;
+    flex-direction: column;
+    overflow:hidden;
+}
+/* Header */
+#chat-header {
+     background: #2c3e50;
+     color: white;
+      padding: 15px;
+       display: flex;
+        align-items: center;
+         justify-content: space-between;
+          border-bottom: 4px solid #f39c12;
+        }
+.brand {
+    display: flex;
+     align-items: center;
+     gap: 10px;
+    }
+.logo-box {
+    width: 35px;
+    height: 35px;
+     background: #e75a5a;
+      border-radius: 5px;
+       display:flex;
+        justify-content: center;
+         align-items: center;
+          font-weight: bold;
+     font-size: 12px;
+    }
+#clock {
+        font-family: monospace;
+         font-size: 13px;
+         opacity: 0.8;
+    }
+
+    /* Janela */
+#chat-window {flex: 1;
+        padding: 20px;
+         overflow-y: auto;
+          background: #534d4d;
+           display: flex;
+            flex-direction: column;
+             gap: 10px; 
+    }
+.msg {
+    padding: 10px 14px;
+     border-radius: 15px;
+      font-size: 14px;
+       max-width: 80%;
+     word-wrap: break-word;
+}
+.user {
+    background: #101418;
+     color: rgb(199, 185, 185);
+     align-self: flex-end;
+     border-bottom-right-radius: 2px;
+}
+.bot {
+    background: #f9f8f8;
+    color: #000000;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+    border: 1px solid #ddedda;
+}
+
+/* Controles */
+#input-area {display: flex;
+     padding: 15px;
+      background: #de4f4f;
+       border-top: 1px solid #000000;
+    }
+#user-input {flex: 1;
+     padding: 10px;
+      border: 1px solid #141313;
+       border-radius: 20px;
+        outline: none;
+    }
+#send-btn {background: #27ae60;
+     color:white;
+      border: none;
+       padding: 0 15px;
+        margin-left: 8px;
+         border-radius: 20px;
+          cursor: pointer;
+           transition: 0.3s;
+        }
+#send-btn:hover {
+    background: #28342d;
+}
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="chat-header">
+        <div class="brand">
+            <div class="logo-box">KB</div>
+            <span>KatronBot</span>
+            </div>
+        <div id="clock">00:00</div>
+        </div>
+
+<div id="chat-window">
+    <div class="msg bot">Fala seu frágil ser Humano! Sou um meio Deus da Grécia Antiga e sou um assistente digital de Eletroeletrônica. Como eu poderia te Guiar ao caminho da VITÓRIA hoje?</div>
+    </div>
+
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Escreva sua mensagem..." autocomplete="off">
+        <button id="send-btn">Enviar</button>
+        </div>
+    </div>
+
+<script>
+    // 1. Relógio
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('clock').innerText = 
+        now.toLocaleDateString([], {hour: '2-digit', minute:'2-digit'});
+    }
+    setInterval(updateTime,1000);
+    updateTime();
+
+    // 2. Banco de Dados (15+ Respostas)
+    const brain = [
+    { key: "bom dia", resp: "Bom dia! Em que posso ajudar com eletrônica hoje?" },
+    { key: "boa tarde", resp: "Boa tarde! Precisa de ajuda com algum circuito?" },
+    { key: "nome", resp: "Meu nome é ElectroBot, seu assistente virtual de eletrônica." },
+    { key: "resistor", resp: "Resistores são usados para limitar corrente em um circuito." },
+    { key: "capacitor", resp: "Capacitores armazenam energia elétrica temporariamente." },
+    { key: "transistor", resp: "Transistores funcionam como chave ou amplificador de sinal." },
+    { key: "diodo", resp: "Diodos permitem a passagem de corrente em apenas um sentido." },
+    { key: "led", resp: "LEDs são diodos emissores de luz. Não esqueça do resistor em série!" },
+    { key: "arduino", resp: "Arduino é uma plataforma de prototipagem eletrônica muito popular." },
+    { key: "tensao", resp: "Tensão é a diferença de potencial elétrico medida em volts (V)." },
+    { key: "corrente", resp: "Corrente elétrica é o fluxo de elétrons, medida em ampères (A)." },
+    { key: "ohm", resp: "A Lei de Ohm diz: V = R * I (tensão = resistência x corrente)." },
+    { key: "curto", resp: "Cuidado! Curto-circuito pode danificar componentes e causar riscos." },
+    { key: "fonte", resp: "Fontes de alimentação convertem energia para alimentar circuitos." },
+    { key: "multimetro", resp: "Multímetro mede tensão, corrente e resistência." },
+    { key: "solda", resp: "Use ferro de solda adequado e estanho para conexões seguras." },
+    { key: "placa", resp: "PCB é uma placa de circuito impresso onde os componentes são montados." },
+    { key: "projeto", resp: "Posso ajudar você a montar ou entender seu projeto eletrônico!" },
+    { key: "erro", resp: "Verifique conexões, polaridade e alimentação do circuito." },
+    { key: "contato", resp: "Entre em contato para suporte técnico em eletrônica." }
+];
+
+    const windowChat = document.getElementById('chat-window');
+    const inputField = document.getElementById('user-input');
+    const button = document.getElementById('send-btn');
+
+    function sendMessage() {
+        const text = inputField.value.trim();
+        if (text === "") return;
+
+        // Mensagem do Usuário
+        appendMsg(text, 'user');
+        inputField.value = "";
+
+        // Efeito de carregamento (evita o "travamento" visual)
+        const loading = document.createElement('div');
+        loading.className = 'msg bot';
+        loading.innerText = "...";
+        windowChat.appendChild(loading);
+        windowChat.scrollTop = windowChat.scrollHeight;
+
+        setTimeout(() => {
+            windowChat.removeChild(loading);
+            const response = findResponse(text);
+            appendMsg(response, 'bot');
+        }, 600);
+    }
+
+    function findResponse(userInput) {
+        const cleanInput = userInput.toLowerCase();
+        // Tenta achar a chave no banco de dados
+        const match = brain.find(item => cleanInput.includes(item.key));
+        return match ? match.resp : "Desculpe, não entendi. Tente termos como: resistor, capacitor, tensão ou Arduino.";
+    }
+
+    function appendMsg(text, side) {
+        const div = document.createElement('div');
+        div.className = `msg ${side}`;
+        div.innerText = text;
+        windowChat.appendChild(div);
+        windowChat.scrollTop = windowChat.scrollHeight;
+    }
+
+    // Eventos
+    button.onclick = sendMessage;
+    inputField.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+</script>
+</body>
+</html>
